@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Main {
     private ArrayList<School>schools=new ArrayList<School>();
-    private HashMap<String,School>schoolsmap;
+    private HashMap<String,School>schoolsmap=new HashMap<>();
     public static void main(String[] args) {
         Scanner entrada=new Scanner(System.in);
         Main o=new Main();
@@ -59,14 +59,14 @@ public class Main {
                             }
                         }
                     }
-                    case 3 -> System.out.println(o.orderAndReturn().toArray());
-                    case 4 -> System.out.println(o.orderAndReturnInsercion().toArray());
-                    case 5 -> System.out.println(o.orderSort().toArray());
+                    case 3 -> System.out.println(o.orderAndReturn().toString());
+                    case 4 -> System.out.println(o.orderAndReturnInsercion().toString());
+                    case 5 -> System.out.println(o.orderSort().toString());
                     case 6 -> System.out.println(o.copymap().toString());
                     case 7 ->{
                         System.out.println("ingresar id a buscar:");
                         String id=entrada.next();
-                        o.binarySerach(o.schools,id);
+                        System.out.println("los datos de la escuela son "+o.getSchools().get(o.binarySerach(id)).toString());
                     }
                     case 8 ->{
                         System.out.println("ingresar id a buscar:");
@@ -185,18 +185,20 @@ public class Main {
     public ArrayList<School> orderAndReturn(){
         long totalSum = 0;
         long startTime = System.currentTimeMillis();
-        ArrayList<School>schools=new ArrayList<School>();
-        for (School o:schools) {
-         schools.add(o);
-        }
-        for (int i = 0; i <schools.size() ; i++) {
 
-            for (int j = 0; j < schools.size()-1 ; j++) {
-                School actualElement=schools.get(j);
-                School nextElement=schools.get(j+1);
+        ArrayList<School>schools2=new ArrayList<School>();
+        for (School o:schools) {
+         schools2.add(o);
+        }
+
+        for (int i = 0; i <schools2.size() ; i++) {
+
+            for (int j = 0; j < schools2.size()-1 ; j++) {
+                School actualElement=schools2.get(j);
+                School nextElement=schools2.get(j+1);
                 if (actualElement.getIdSchool().compareTo(nextElement.getIdSchool())>0){
-                    schools.set(j,nextElement);
-                    schools.set(j+1,actualElement);
+                    schools2.set(j,nextElement);
+                    schools2.set(j+1,actualElement);
                 }
             }
 
@@ -208,58 +210,67 @@ public class Main {
     public ArrayList<School> orderAndReturnInsercion() {
         long totalSum = 0;
         long startTime = System.currentTimeMillis();
-        ArrayList<School> schools = new ArrayList<School>();
-        for (int i = 1; i < schools.size(); i++) {
-            School key = schools.get(i);
+        ArrayList<School> schools2 = new ArrayList<School>();
+        for (School o:schools) {
+            schools2.add(o);
+        }
+        for (int i = 1; i < schools2.size(); i++) {
+            School key = schools2.get(i);
             int j = i - 1;
 
-            while (j >= 0 && schools.get(j).getIdSchool().compareTo(key.getIdSchool()) > 0) {
-                schools.set(j + 1, schools.get(j));
+            while (j >= 0 && schools2.get(j).getIdSchool().compareTo(key.getIdSchool()) > 0) {
+                schools2.set(j + 1, schools2.get(j));
                 j--;
             }
-            schools.set(j + 1, key);
+            schools2.set(j + 1, key);
         }
         totalSum += (System.currentTimeMillis() - startTime);
         System.out.println("El tiempo de ejecución fue de " + totalSum);
-        return schools;
+        return schools2;
     }
 
     public ArrayList<School>orderSort(){
         long totalSum = 0;
         long startTime = System.currentTimeMillis();
-        ArrayList<School>schools=new ArrayList<School>();
+        ArrayList<School>schools2=new ArrayList<School>();
         for (School o:schools) {
-            schools.add(o);
+            schools2.add(o);
         }
-        Collections.sort(schools);
+        Collections.sort(schools2);
         totalSum+= (System.currentTimeMillis()-startTime);
         System.out.println("El tiempo de ejecucuion fue de "+ totalSum);
-        return schools;
+        return schools2;
     }
     public HashMap<String,School>copymap(){
         if(schoolsmap==null){
-            schoolsmap = new HashMap<String,School>();
+
             for (School o:schools
                  ) {
+                schoolsmap.put(o.getIdSchool(),o);
+            }
+        }else {
+
+            for (School o:schools
+            ) {
                 schoolsmap.put(o.getIdSchool(),o);
             }
         }
         return schoolsmap;
     }
-    public int binarySerach(ArrayList<School>arreglo,String id){
+    public int binarySerach(String id){
         long totalSum = 0;
         long startTime = System.currentTimeMillis();
-        int l=0,r=arreglo.size()-1;
+        int l=0,r=schools.size()-1;
         while (l<=r){
-            int m=l+(r-1)/2;
-            if(arreglo.get(m).equals(id)){
+            int m=(l+r)/2;
+            if(schools.get(m).getIdSchool().compareTo(id)<0){
+                l=m+1;
+            }else if(schools.get(m).getIdSchool().compareTo(id)>0){
+                r=m-1;
+            }else {
                 return m;
             }
-            if (!arreglo.get(m).equals(id)){
-                l=m+1;
-            }else {
-                r=m-1;
-            }
+
         }
         totalSum+= (System.currentTimeMillis()-startTime);
         System.out.println("El tiempo de ejecucuion fue de "+ totalSum);
@@ -286,7 +297,20 @@ public class Main {
             return "La escuela con el id  "+id +" se ha removido correctamente";
         }
     }
-    
 
+    public ArrayList<School> getSchools() {
+        return schools;
+    }
 
+    public void setSchools(ArrayList<School> schools) {
+        this.schools = schools;
+    }
+
+    public HashMap<String, School> getSchoolsmap() {
+        return schoolsmap;
+    }
+
+    public void setSchoolsmap(HashMap<String, School> schoolsmap) {
+        this.schoolsmap = schoolsmap;
+    }
 }
