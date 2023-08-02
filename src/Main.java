@@ -59,10 +59,10 @@ public class Main {
                             }
                         }
                     }
-                    case 3 -> System.out.println(o.orderAndReturn());
-                    case 4 -> System.out.println(o.orderAndReturnInsercion());
-                    case 5 -> System.out.println(o.orderSort());
-                    case 6 -> System.out.println(o.copymap());
+                    case 3 -> System.out.println(o.orderAndReturn().toArray());
+                    case 4 -> System.out.println(o.orderAndReturnInsercion().toArray());
+                    case 5 -> System.out.println(o.orderSort().toArray());
+                    case 6 -> System.out.println(o.copymap().toString());
                     case 7 ->{
                         System.out.println("ingresar id a buscar:");
                         String id=entrada.next();
